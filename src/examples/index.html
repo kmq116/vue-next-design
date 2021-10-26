@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>index</title>
   </head>
   <!-- setAttribute 设置属性会将 值得类型转为字符串 -->
   <!-- custom 非标准属性 访问结果是 undefined -->
@@ -13,8 +13,6 @@
     <div id="portal-box"></div>
     <input id="input" checked="true" type="checkbox" />
     <script type="module">
-      document.getElementById("input").setAttribute("checked", false);
-      document.getElementById("input").setAttribute("custom", "custom");
       import { Fragment, Portal, h, render } from "../../dist/main.js";
 
       // const newVnode = h(
@@ -71,20 +69,20 @@
       //   ])
       // );
 
-      // const newVnode = h(
-      //   "div",
-      //   {
-      //     style: {
-      //       height: "100px",
-      //       width: "100px",
-      //       background: "red",
-      //     },
-      //   },
-      //   h(Fragment, null, [
-      //     h("span", null, "我是标题1......"),
-      //     h("span", null, "我是标题2......"),
-      //   ])
-      // );
+      const newVnode = h(
+        "div",
+        {
+          style: {
+            height: "100px",
+            width: "100px",
+            background: "red",
+          },
+        },
+        h(Fragment, null, [
+          h("span", null, "我是标题1......"),
+          h("span", null, "我是标题2......"),
+        ])
+      );
 
       // 有状态组件
       class MyComponent {
@@ -122,9 +120,12 @@
         );
       }
 
-      console.log(componentVnode);
-      const fnCom = h(MyFunctionalComponent);
-      render(fnCom, document.getElementById("app"));
+      // const fnCom = h(MyFunctionalComponent);
+      render(h("div", null, "旧的 VNode"), document.getElementById("app"));
+      render(h("p", null, "旧的 VNode"), document.getElementById("app"));
+
+      // render(componentVnode, document.getElementById("app"));
+
       // const F = h(Fragment, null, [h("td"), h("td")]);
       // const P = h(Portal, { target: "#app" }, h("h1"));
       // // 有状态组件

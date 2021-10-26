@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>diff</title>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="module">
+      import { Fragment, Portal, h, render } from "../../dist/main.js";
+
+      // 旧的 VNode
+      const prevVNode = h("div", {
+        style: {
+          width: "100px",
+          height: "100px",
+          backgroundColor: "red",
+        },
+        onclick: () => {
+          console.log(123);
+        },
+      });
+
+      // 新的 VNode
+      const nextVNode = h("div", {
+        style: {
+          width: "100px",
+          height: "100px",
+          border: "1px solid green",
+        },
+      });
+      console.log(nextVNode);
+      render(prevVNode, document.getElementById("app"));
+      render(nextVNode, document.getElementById("app"));
+    </script>
+  </body>
+</html>

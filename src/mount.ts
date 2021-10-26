@@ -1,17 +1,24 @@
 import { createTextVNode } from "./h";
-import { unifiedClass } from "./utils";
+import { patchData, unifiedClass } from "./utils";
 import { ChildrenFlags, VNodeFlags } from "./utils/enums";
 
+interface VNodeData {
+  style: CSSStyleDeclaration;
+  [propName: string]: any;
+}
 interface VNode {
-  data: any;
-  el: Element;
+  data: VNodeData;
+  el: Element | SVGElement;
   tag: any;
   children: any;
   flags: VNodeFlags;
   childFlags: ChildrenFlags;
 }
-
-export function mount(vnode, container, isSVG: Boolean | Number = false) {
+export function mount(
+  vnode: VNode,
+  container: Node,
+  isSVG: Boolean | Number = false
+) {
   const { flags } = vnode;
   if (flags & VNodeFlags.ELEMENT) {
     // 普通标签
@@ -29,12 +36,9 @@ export function mount(vnode, container, isSVG: Boolean | Number = false) {
   }
 }
 
-// ?: 非捕获分组 匹配到的数据不会被捕获
-const domPropsReg = /[A_Z]|^(?:value|type|checked|selected|muted)/;
-
 function mountElement(
   vnode: VNode,
-  container,
+  container: Node,
   isSVG: Boolean | Number = false
 ) {
   isSVG = isSVG || vnode.flags & VNodeFlags.ELEMENT_SVG;
@@ -49,35 +53,7 @@ function mountElement(
     // 遍历
     for (const key in data) {
       if (Object.prototype.hasOwnProperty.call(data, key)) {
-        switch (key) {
-          // 渲染内联样式
-          case "style":
-            for (let k in data.style) {
-              el.style[k] = data.style[k];
-            }
-            break;
-
-          case "class":
-            // 类名赋值
-            el.className = unifiedClass(data[key]);
-            break;
-          default:
-            // on 开头的是事件
-            // 检测是不是事件
-
-            if (key[0] === "o" && key[1] === "n") {
-              el.addEventListener(key.slice(2), data[key]);
-            }
-
-            // 几个特殊值的 true false 都会被字符串转成 true 所以直接赋值
-            else if (domPropsReg.test(key)) {
-              el[key] = data[key];
-            } else {
-              // Attr 直接处理
-              el.setAttribute(key, data[key]);
-            }
-            break;
-        }
+        patchData(el, key, null, data[key]);
       }
     }
   }
