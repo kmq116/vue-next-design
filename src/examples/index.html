@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <!-- setAttribute 设置属性会将 值得类型转为字符串 -->
+  <!-- custom 非标准属性 访问结果是 undefined -->
+  <body id="456">
+    <div id="app"></div>
+    <div id="portal-box"></div>
+    <input id="input" checked="true" type="checkbox" />
+    <script type="module">
+      document.getElementById("input").setAttribute("checked", false);
+      document.getElementById("input").setAttribute("custom", "custom");
+      import { Fragment, Portal, h, render } from "../../dist/main.js";
+
+      // const newVnode = h(
+      //   "div",
+      //   {
+      //     onclick: handler,
+      //     style: {
+      //       width: "100px",
+      //       height: "100px",
+      //       background: "red",
+      //     },
+      //   },
+      //   "123123"
+      // );
+      // function handler() {
+      //   console.log(123);
+      // }
+      // const newVnode = h("input", {
+      //   class: "cls-a",
+      //   type: "checkbox",
+      //   checked: true,
+      //   custom: "1",
+      // });
+      // h(
+      //   "div",
+      //   {
+      //     style: {
+      //       height: "100px",
+      //       width: "100px",
+      //       background: "red",
+      //     },
+      //   },
+      //   h("div", {
+      //     style: {
+      //       height: "50px",
+      //       width: "50px",
+      //       background: "green",
+      //     },
+      //     class: "class-a class-b",
+      //   })
+      // );
+      // const newVnode = h(
+      //   "div",
+      //   {
+      //     style: {
+      //       height: "100px",
+      //       width: "100px",
+      //       background: "red",
+      //     },
+      //   },
+      //   h(Portal, { target: "#portal-box" }, [
+      //     h("span", null, "我是标题1......"),
+      //     h("span", null, "我是标题2......"),
+      //   ])
+      // );
+
+      // const newVnode = h(
+      //   "div",
+      //   {
+      //     style: {
+      //       height: "100px",
+      //       width: "100px",
+      //       background: "red",
+      //     },
+      //   },
+      //   h(Fragment, null, [
+      //     h("span", null, "我是标题1......"),
+      //     h("span", null, "我是标题2......"),
+      //   ])
+      // );
+
+      // 有状态组件
+      class MyComponent {
+        render() {
+          return h(
+            "div",
+            {
+              style: {
+                background: "green",
+              },
+            },
+            [
+              h("span", null, "我是组件的标题1......"),
+              h("span", null, "我是组件的标题2......"),
+            ]
+          );
+        }
+      }
+      // classComponent
+      const componentVnode = h(MyComponent);
+
+      // 函数式组件
+      function MyFunctionalComponent() {
+        return h(
+          "div",
+          {
+            style: {
+              background: "green",
+            },
+          },
+          [
+            h("span", null, "我是组件的标题1......"),
+            h("span", null, "我是组件的标题2......"),
+          ]
+        );
+      }
+
+      console.log(componentVnode);
+      const fnCom = h(MyFunctionalComponent);
+      render(fnCom, document.getElementById("app"));
+      // const F = h(Fragment, null, [h("td"), h("td")]);
+      // const P = h(Portal, { target: "#app" }, h("h1"));
+      // // 有状态组件
+      // class Component {
+      //   render() {
+      //     throw "组件没有 render 函数";
+      //   }
+      // }
+      // class MyStatefulComponent extends Component {}
+      // const statefulComponentVNode = h(MyStatefulComponent, null, h("div"));
+    </script>
+  </body>
+</html>
