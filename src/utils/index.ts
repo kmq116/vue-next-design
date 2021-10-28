@@ -10,14 +10,14 @@ export function unifiedClass(params) {
     return result;
   } else if (typeof params === "object") {
     for (const key in params) {
-      if (Object.prototype.hasOwnProperty.call(params, key)) {
-        const o = params[key];
-        if (!!o === true) {
-          result += `${key}\n`;
-        }
+      const o = params[key];
+      if (!!o === true) {
+        result += `${key}\n`;
       }
     }
     return result;
+  } else {
+    throw new TypeError("参数必须是数组或对象");
   }
 }
 
@@ -49,7 +49,6 @@ export function patchData(el, key, prevValue, nextValue) {
     default:
       // on 开头的是事件
       // 检测是不是事件
-      console.log(key);
 
       if (key[0] === "o" && key[1] === "n") {
         if (prevValue) {
