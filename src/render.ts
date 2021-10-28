@@ -1,10 +1,7 @@
 import { mount } from "./mount";
 import { patch } from "./patch";
 export function render(vnode, container) {
-  console.log(container);
-
   const prevVNode = container.vnode;
-
   // trick 新增
   if (prevVNode == null) {
     if (vnode) {

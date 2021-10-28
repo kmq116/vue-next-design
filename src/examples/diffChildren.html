@@ -38,13 +38,10 @@
       // );
 
       // 旧的 VNode
-      const prevVNode = h("div", null, h("p", null, "只有一个子节点"));
+      const prevVNode = h("div", null, "123");
 
       // 新的 VNode
-      const nextVNode = h("div", null, [
-        h("p", null, "子节点 1"),
-        h("p", null, "子节点 2"),
-      ]);
+      const nextVNode = h("div", null, "456");
 
       console.log(nextVNode);
       render(prevVNode, document.getElementById("app"));

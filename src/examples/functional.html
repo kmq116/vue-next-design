@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>fnDiff</title>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="module">
+      import { Fragment, Portal, h, render } from "../../dist/main.js";
+      // class MyComponent {
+      //   // 自身状态 or 本地状态
+      //   localState = "one";
+
+      //   // mounted 钩子 没有生命周期 需要主动调用
+      //   mounted() {
+      //     // 两秒钟之后修改本地状态的值，并重新调用 _update() 函数更新组件
+      //     setTimeout(() => {
+      //       this.localState = "two";
+      //       this._update();
+      //     }, 2000);
+      //   }
+      //   // 两秒钟之后修改本地状态的值，并重新调用 _update() 函数更新组件
+
+      //   render() {
+      //     return h("div", null, this.localState);
+      //   }
+      // }
+      // 子组件 - 函数式组件
+      function MyFunctionalComp(props) {
+        return h("div", null, props.text);
+      }
+      class ParentComponent {
+        localState = "one";
+
+        mounted() {
+          setTimeout(() => {
+            console.log("更新 two");
+            this.localState = "two";
+            this._update();
+          }, 2000);
+        }
+        render() {
+          return h(MyFunctionalComp, {
+            text: this.localState,
+          });
+        }
+      }
+      render(h(ParentComponent), document.getElementById("app"));
+    </script>
+  </body>
+</html>

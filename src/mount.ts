@@ -1,5 +1,6 @@
 import { createTextVNode } from "./h";
-import { patchData, unifiedClass } from "./utils";
+import { patch } from "./patch";
+import { patchData } from "./utils";
 import { ChildrenFlags, VNodeFlags } from "./utils/enums";
 
 interface VNodeData {
@@ -76,31 +77,84 @@ function mountElement(
 }
 
 // 组件挂载 有状态 无状态
-function mountComponent(vnode, container) {
+function mountComponent(vnode: VNode, container: Node) {
   if (vnode.flags & VNodeFlags.COMPONENT_STATEFUL) {
     // 有状态组件
     mountStatefulComponent(vnode, container);
   } else {
+    console.log("函数组件");
+
     mountFunctionalComponent(vnode, container);
   }
 }
 
-function mountStatefulComponent(vnode, container, isSVG = false) {
-  const instance = new vnode.tag();
+function mountStatefulComponent(vnode: VNode, container: Node, isSVG = false) {
+  // 将 children 也指向 tag 函数
+  const instance = (vnode.children = new vnode.tag());
 
-  instance.$vnode = instance.render();
+  // 初始化 props
+  instance.$props = vnode.data;
 
-  mount(instance.$vnode, container, isSVG);
+  instance._update = function () {
+    if (instance._mounted) {
+      console.log("有 mounted 更新");
 
-  instance.$el = vnode.el = instance.$vnode.el;
+      // 挂载过则重新渲染 并更新
+      const prevVNode = instance.$vnode,
+        nextVNode = (instance.$vnode = instance.render());
+
+      patch(prevVNode, nextVNode, container);
+
+      instance.$el = vnode.el = instance.$vnode.el;
+    } else {
+      // 没有挂载过则挂载
+      instance.$vnode = instance.render();
+
+      mount(instance.$vnode, container, isSVG);
+
+      instance._mounted = true;
+
+      instance.$el = vnode.el = instance.$vnode.el;
+
+      // 调用 mounted 钩子
+      instance.mounted && instance.mounted();
+    }
+  };
+
+  // 组件自身状态发生更新后 即可再次调用 _update 函数更新
+  instance._update();
 }
 
 function mountFunctionalComponent(vnode, container, isSVG = false) {
-  const $vnode = vnode.tag();
+  // 因为 函数式组件没有实例 所以 在 vnode 上定义 update 函数
+  vnode.handle = {
+    prev: null,
+    next: vnode,
+    container,
+    update: () => {
+      // 更新调用
+      if (vnode.handle.prev) {
+        const prevVNode = vnode.handle.prev,
+          nextVNode = vnode.handle.next,
+          prevTree = prevVNode.children,
+          props = nextVNode.data,
+          nextTree = (nextVNode.children = vnode.tag(props));
+        // 调用 patch 函数
+        patch(prevTree, nextTree, vnode.handle.container);
+      } else {
+        // 挂载调用
+        const props = vnode.data,
+          $vnode = (vnode.children = vnode.tag(props));
 
-  mount($vnode, container, isSVG);
+        mount($vnode, container, isSVG);
 
-  vnode.el = $vnode.el;
+        vnode.el = $vnode.el;
+      }
+    },
+  };
+
+  // 先调用一次 update 函数
+  vnode.handle.update();
 }
 
 // 挂载文本节点

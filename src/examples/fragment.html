@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>diffChildren</title>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="module">
+      import { Fragment, Portal, h, render } from "../../dist/main.js";
+
+      // 旧的 VNode
+      const prevVNode = h(Fragment, null, [
+        h("p", null, "旧片段子节点 1"),
+        h("p", null, "旧片段子节点 2"),
+      ]);
+
+      // 新的 VNode
+      const nextVNode = h(Fragment, null, [
+        h("p", null, "新片段子节点 1"),
+        h("p", null, "新片段子节点 2"),
+      ]);
+
+      console.log(nextVNode);
+      render(prevVNode, document.getElementById("app"));
+      setTimeout(() => {
+        render(nextVNode, document.getElementById("app"));
+      }, 1000);
+    </script>
+  </body>
+</html>
