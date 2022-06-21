@@ -1,20 +1,18 @@
 {
   "compilerOptions": {
-      "target": "es2017",
-      "moduleResolution": "Node", 
-      "outDir": "dist/",
-      "module": "esnext",
-      "baseUrl": "./",
-      "sourceMap": true,
-      "allowSyntheticDefaultImports": true,
-      "paths": {
-          "@/*": ["./src/*"]
-      }
+    "target": "es2017",
+    "moduleResolution": "Node",
+    "outDir": "dist/",
+    "module": "esnext",
+    "baseUrl": "./",
+    "sourceMap": true,
+    "declaration": true,
+    "noImplicitAny": true,
+    "allowSyntheticDefaultImports": true,
+    "paths": {
+      "@/*": ["./src/*"]
+    }
   },
-  "exclude": [
-      "node_modules"
-  ],
-  "include": [
-      "src/**/*.ts"
-  ]
+  "exclude": ["node_modules"],
+  "include": ["src/**/*.ts"]
 }
