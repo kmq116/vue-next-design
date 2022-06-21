@@ -1,21 +1,30 @@
 import { VNodeFlags, ChildrenFlags } from "./utils/enums";
 
-interface H {
-  _isVnode: Boolean;
-  flags: Number;
-  tag: any;
+export interface H_Result {
+  _isVnode: boolean;
+  flags: VNodeFlags; // vNode 枚举值作为标识
+  tag: Tag;
   data: any;
   children: any;
-  childFlags: Number;
-  el: null;
+  childFlags: ChildrenFlags;
+  el: any;
 }
-
+type Tag =
+  | string
+  | typeof Fragment
+  | typeof Portal
+  | null
+  | { [key: string]: any };
 // 唯一标识
 export const Fragment = Symbol();
 export const Portal = Symbol();
-export function h(tag, data = null, children = null): H {
-  let flags = null;
-
+export function h(
+  tag: Tag,
+  data: any = null,
+  children: Array<any> | null | { _isVnode: boolean } = null
+): H_Result {
+  let flags: VNodeFlags = null;
+  // 如果是字符串说明传入的是标签
   if (typeof tag === "string") {
     // 判断是不是 svg
     flags = tag === "svg" ? VNodeFlags.ELEMENT_SVG : VNodeFlags.ELEMENT_HTML;
@@ -39,7 +48,7 @@ export function h(tag, data = null, children = null): H {
     }
   }
 
-  let childFlags = null;
+  let childFlags: ChildrenFlags = null;
   if (Array.isArray(children)) {
     const { length } = children;
     if (length === 0) {
@@ -77,7 +86,7 @@ export function h(tag, data = null, children = null): H {
   };
 }
 
-function normalizeVNodes(children) {
+function normalizeVNodes(children: Array<any>) {
   const newChildren = [];
 
   for (let i = 0; i < children.length; i++) {
@@ -93,7 +102,7 @@ function normalizeVNodes(children) {
   return newChildren;
 }
 
-export function createTextVNode(text: string) {
+export function createTextVNode(text: string): H_Result {
   return {
     _isVnode: true,
     flags: VNodeFlags.TEXT,

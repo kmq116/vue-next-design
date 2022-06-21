@@ -1,4 +1,4 @@
-export enum VNodeFlags {
+export const enum VNodeFlags {
   // html
   ELEMENT_HTML = 1,
 

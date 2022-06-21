@@ -1,4 +1,6 @@
-export function unifiedClass(params) {
+export function unifiedClass(
+  params: string | Array<string> | { [key: string]: any }
+): string {
   let result = "";
   if (typeof params === "string") {
     return (result += params);
@@ -21,7 +23,12 @@ export function unifiedClass(params) {
   }
 }
 
-export function patchData(el, key, prevValue, nextValue) {
+export function patchData(
+  el: any,
+  key: string,
+  prevValue: any,
+  nextValue: any
+) {
   // ?: 非捕获分组 匹配到的数据不会被捕获
   const domPropsReg = /[A_Z]|^(?:value|type|checked|selected|muted)/;
   switch (key) {

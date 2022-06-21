@@ -125,7 +125,7 @@ function mountStatefulComponent(vnode: VNode, container: Node, isSVG = false) {
   instance._update();
 }
 
-function mountFunctionalComponent(vnode, container, isSVG = false) {
+function mountFunctionalComponent(vnode: any, container: Node, isSVG = false) {
   // 因为 函数式组件没有实例 所以 在 vnode 上定义 update 函数
   vnode.handle = {
     prev: null,
@@ -158,12 +158,16 @@ function mountFunctionalComponent(vnode, container, isSVG = false) {
 }
 
 // 挂载文本节点
-function mountText(vnode, container) {
+function mountText(vnode: { children: string; el: Node }, container: Node) {
   const el = document.createTextNode(vnode.children);
   vnode.el = el; //引用节点对象
   container.appendChild(el);
 }
-function mountFragment(vnode, container, isSVG = false) {
+function mountFragment(
+  vnode: { children: any; childFlags: ChildrenFlags; el?: Node },
+  container: Node,
+  isSVG = false
+) {
   const { children, childFlags } = vnode;
 
   switch (childFlags) {
@@ -189,7 +193,15 @@ function mountFragment(vnode, container, isSVG = false) {
 }
 
 // 挂载到任意节点
-function mountPortal(vnode, container) {
+function mountPortal(
+  vnode: {
+    tag: Node | string;
+    children: any;
+    childFlags: ChildrenFlags;
+    el?: Node;
+  },
+  container: Node
+) {
   const { tag, children, childFlags } = vnode;
 
   // 字符串当做节点去获取 否则直接拿节点

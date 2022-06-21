@@ -95,10 +95,10 @@ function patchElement(prevVNode: VNode, nextVNode: VNode, container: Node) {
 }
 
 function patchChildren(
-  prevChildFlags,
-  nextChildFlags,
-  prevChildren,
-  nextChildren,
+  prevChildFlags: any,
+  nextChildFlags: any,
+  prevChildren: any,
+  nextChildren: any,
   container: Node
 ) {
   switch (prevChildFlags) {

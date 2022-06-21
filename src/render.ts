@@ -1,6 +1,7 @@
+import { H_Result } from "./h";
 import { mount } from "./mount";
 import { patch } from "./patch";
-export function render(vnode, container) {
+export function render(vnode: H_Result, container: Node & { vnode: H_Result }) {
   const prevVNode = container.vnode;
   // trick 新增
   if (prevVNode == null) {
