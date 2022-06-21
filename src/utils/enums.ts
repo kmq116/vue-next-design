@@ -40,7 +40,7 @@ export enum VNodeFlags {
 
 export enum ChildrenFlags {
   // 未知
-  UNKNOW_CHILDREN = 0,
+  UNKNOWN_CHILDREN = 0,
 
   // 没有
   NO_CHILDREN = 1,
