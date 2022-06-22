@@ -8,13 +8,14 @@ interface VNodeData {
   [propName: string]: any;
 }
 interface VNode {
-  data: VNodeData;
+  data: VNodeData | null;
   el: Element | SVGElement;
   tag: any;
   children: any;
   flags: VNodeFlags;
   childFlags: ChildrenFlags;
 }
+// 根据不同的标签类型去挂载不同的标签
 export function mount(
   vnode: VNode,
   container: Node,
@@ -37,13 +38,14 @@ export function mount(
   }
 }
 
+// 挂载 Element 节点
 function mountElement(
   vnode: VNode,
   container: Node,
   isSVG: Boolean | Number = false
 ) {
   isSVG = isSVG || vnode.flags & VNodeFlags.ELEMENT_SVG;
-
+  //  如果是 svg 标签需要创建 svg 元素
   const el: HTMLElement = isSVG
     ? document.createElementNS("http://www.w3.org/2000/svg", vnode.tag)
     : document.createElement(vnode.tag);
@@ -51,6 +53,7 @@ function mountElement(
   vnode.el = el;
   const { data, childFlags, children } = vnode;
   if (data) {
+    // data 的值是 style value class 或者其自定义的属性
     // 遍历
     for (const key in data) {
       if (Object.prototype.hasOwnProperty.call(data, key)) {
